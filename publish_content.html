@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Use this CSS stylesheet to ensure that add-ons styling 
+     matches the default Google Docs styles -->
+    <link href="https://ssl.gstatic.com/docs/script/css/add-ons1.css"
+     rel="stylesheet"> 
+    <style>
+      textarea {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 0.3em 0.4em 0.3em 0.5em;
+        -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+        transition: border linear 0.2s, box-shadow linear 0.2s;
+        color: #595959;
+        border: 1px solid #b8b8b8;
+        border-top-color: #999;
+        border-radius: 2px;
+        background: #fcfcfa;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.125);
+        font-size: 1em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <div class="block">
+        <i>You are going to publish this document to <a href="<?= data ?>" target="_blank"><?= data ?></a>.
+        <br><a onclick="google.script.run.showPublishSelectSiteSidebar()">Click Here</a> to go back and change site.</i>
+      </div>
+      <div class="block form-group">
+        <label for="summary">Summary</label>
+        <textarea id="summary"><?= DocumentApp.getActiveDocument().getText() ?></textarea>
+      </div>
+      <div class="block form-group">
+        <label for="type">Select Content Type</label>
+        <select id="type">
+          <option value="article">Article</option>
+          <option value="page">Page</option>
+        </select>
+      </div>
+      <div class="block form-group">
+        <label for="user">Select User</label>
+        <select id="user">
+          <? var userProperties = PropertiesService.getUserProperties();
+          var apiKey = userProperties.getProperty(data);
+          var response = UrlFetchApp.fetch(data + '/google_docs/list_users?apiKey=' + apiKey, {muteHttpExceptions: true});
+          var parms = JSON.parse(response.getContentText());
+          for(var i = 0; i < parms.length; i++){ ?>
+            <option value="<?= parms[i].uid ?>"><?= parms[i].name ?></option>
+          <? } ?>
+        </select>
+      </div>
+      <div class="block form-group">
+        <input type="checkbox" id="status" checked>
+        <label for="status">Publish</label>
+      </div>
+      <div class="block form-group">
+        <button class="blue" id="save">Save to Drupal</button>
+      </div>
+    </div>
+
+    <!-- Load the jQuery library from the Google CDN -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    
+    <script>
+      // Attach click handlers after the Sidebar has loaded in Google Docs
+      $(function() {
+        $('#save').click(function() {
+          var summary = $('#summary').val();
+          var type = $('#type').val();
+          var user = $('#user').val();
+          var status = 0;
+          if(document.getElementById('status').checked) {
+            status = 1;
+          };
+          var url = '<?= data ?>';
+          google.script.run.publishContent(summary, type, user, status, url);
+        });
+      });
+    </script>
+  </body>
+</html>

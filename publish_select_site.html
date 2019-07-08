@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Use this CSS stylesheet to ensure that add-ons styling 
+     matches the default Google Docs styles -->
+    <link href="https://ssl.gstatic.com/docs/script/css/add-ons1.css"
+     rel="stylesheet"> 
+  </head>
+  <body>
+    <div class="sidebar">
+      <div class="block form-group">
+        <label for="site">Select Site</label>
+        <select id="site">
+          <? var userProperties = PropertiesService.getUserProperties();
+          var data = userProperties.getProperties();
+          for (var key in data) { ?>
+            <option value="<?= key ?>"><?= key ?></option>
+          <? } ?>
+        </select>
+      </div>
+      <div class="block form-group">
+        <button class="blue" id="continue">Continue</button>
+      </div>
+    </div>
+
+    <!-- Load the jQuery library from the Google CDN -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    
+    <script>
+      // Attach click handlers after the Sidebar has loaded in Google Docs
+      $(function() {
+        $('#continue').click(function() {
+          var url = $('#site').val();
+          console.log(url);
+          google.script.run.showPublishContentSidebar(url);
+        });
+        
+      });
+    </script>
+  </body>
+</html>

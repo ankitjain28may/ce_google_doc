@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Use this CSS stylesheet to ensure that add-ons styling 
+     matches the default Google Docs styles -->
+    <link href="https://ssl.gstatic.com/docs/script/css/add-ons1.css"
+     rel="stylesheet"> 
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+     rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <style>
+      .sites_list {
+        margin-bottom: 25px;
+      }
+      .site_item {
+        background: none repeat scroll 0 0 #F2F2F2;
+        border-radius: 5px;
+        margin: 10px auto;
+        padding: 7px;
+        text-align: left;
+      }
+      .manage_action {
+        float: right;
+        display: inline;
+        position: relative;
+        top: 3px;
+      }
+      .fav_icon {
+        position: relative;
+        top: 3px;
+        margin: 0 5px 0px 5px;
+      }
+      .site_item .delete {
+        display: inline-block;
+        margin-left: 10px;
+      }
+      .content_div {
+        font-family: arial;
+        height: 58%;
+        display: block;
+      }
+      .site_item h3 {
+        float: left;
+        font-size: 12px;
+        font-weight: bold;
+        line-height: 21px;
+        margin: 0;
+        text-align: left;
+        color: #333333;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <div class="block form-group">
+        <label for="site">Enter Drupal Site URL <font color="red">*</font></label>
+        <input type="url" id="site" placeholder="http://example.com/folder" required/>
+      </div>
+      <div class="block form-group">
+        <label for="key">Enter API Key <font color="red">*</font></label>
+        <input type="text" id="key" placeholder="d6a157b3e335ab83fc07d181ca33026b6b2dda5b971512704472704bce438926" required/>
+      </div>
+      <div class="block form-group">
+        <button class="blue" id="add_site">Add Site</button>
+      </div>
+      <br><br>
+      <div class="content_div">
+        <div class="sites_list">    
+          <? var userProperties = PropertiesService.getUserProperties();
+          var data = userProperties.getProperties();
+          console.log(data);
+          for (var key in data) { ?>
+            <div class="site_item block">
+              <h3>
+                <img class="fav_icon" src="https://www.google.com/s2/favicons?domain=<?= key ?>">
+                <a href="<?= key ?>" target="_blank"><?= key ?></a>
+              </h3>
+              <div class="manage_action">
+                <a class="delete" onclick="deleteSite('<?= key ?>')" title="Delete Site"><i class="fa fa-trash"></i></a>
+              </div>
+              <div style="clear:both"></div>
+            </div>
+          <? } ?>               
+        </div>
+      </div>
+    </div>
+
+    <!-- Load the jQuery library from the Google CDN -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    
+    <script>
+      // Attach click handlers after the Sidebar has loaded in Google Docs
+      $(function() {
+        $('#add_site').click(function() {
+          var url = $('#site').val();
+          var key = $('#key').val();
+          if(url == "") {
+            google.script.run.showAlert('Error', 'Site URL can not be empty.');
+          } else if(key == "") {
+            google.script.run.showAlert('Error', 'API Key can not be empty.');
+          } else if(url.slice(-1) == '/') {
+            google.script.run.testConnection(url.slice(0,-1), key);
+          } else {
+            google.script.run.testConnection(url, key);
+          }
+        });
+   
+        $('#site').keyup(function(e) {
+          if (e.keyCode === 13) {
+             $('#add_site').click();
+          }
+        });
+   
+        $('#key').keyup(function(e) {
+          if (e.keyCode === 13) {
+             $('#add_site').click();
+          }
+        });
+        
+      });
+      function deleteSite(url) {
+        google.script.run.deleteSite(url);
+      }
+    </script>
+  </body>
+</html>
