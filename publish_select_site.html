@@ -5,6 +5,21 @@
      matches the default Google Docs styles -->
     <link href="https://ssl.gstatic.com/docs/script/css/add-ons1.css"
      rel="stylesheet"> 
+    <style>
+      select {
+        line-height: 1.5;
+        padding: .6em 2.4em .5em .8em;
+      }
+      option {    font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        display: block;
+        white-space: pre;
+        min-height: 1.2em;
+        padding: 0px 2px 1px;
+      }
+    </style>
   </head>
   <body>
     <div class="sidebar">
@@ -31,7 +46,6 @@
       $(function() {
         $('#continue').click(function() {
           var url = $('#site').val();
-          console.log(url);
           google.script.run.showPublishContentSidebar(url);
         });
         

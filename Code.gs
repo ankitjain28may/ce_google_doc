@@ -44,7 +44,6 @@ function showPublishContentSidebar(url) {
     if(parms.msg === 'ok') {
       var t = HtmlService.createTemplateFromFile('publish_content');
       t.data = url;
-      console.log(t.evaluate());
       DocumentApp.getUi().showSidebar(t.evaluate().setTitle("Publish to Drupal"));
     } else {
       showAlert('Error', 'Unable to connect. Invalid API Key.');
@@ -99,6 +98,7 @@ function deleteSite(url) {
 function publishContent(summary, type, user, status, url) {
   var doc = DocumentApp.getActiveDocument();
   var title = doc.getName();
+  var folder = DriveApp.getRootFolder();
   var link = "https://docs.google.com/feeds/download/documents/export/Export?id="+doc.getId()+"&exportFormat=html";
   var param = {
     method : "get",
@@ -125,7 +125,6 @@ function publishContent(summary, type, user, status, url) {
   };
   var response = UrlFetchApp.fetch(url + '/google_docs/publish', options);
   var parms = JSON.parse(response.getContentText());
-  console.log(parms);
   var documentProperties = PropertiesService.getDocumentProperties();
   documentProperties.setProperty('url', url);
   documentProperties.setProperty('nid', parms.nid);
