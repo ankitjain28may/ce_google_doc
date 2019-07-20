@@ -109,7 +109,8 @@ function showUpdateContentSidebar() {
 function showHelpModal() {
   var htmlOutput = HtmlService
     .createHtmlOutputFromFile('help_modal.html')
-    .setWidth(475);
+    .setWidth(475)
+    .setHeight(425);
   DocumentApp.getUi().showModalDialog(htmlOutput, 'Help for Publish to Drupal');
 }
 
@@ -167,6 +168,7 @@ function deleteSite(url) {
 function publishContent(summary, type, user, status, url) {
   var doc = DocumentApp.getActiveDocument();
   var title = doc.getName();
+  var folder = DriveApp.getRootFolder();
   var link = "https://docs.google.com/feeds/download/documents/export/Export?id="+doc.getId()+"&exportFormat=html";
   var param = {
     method : "get",
@@ -207,6 +209,7 @@ function publishContent(summary, type, user, status, url) {
 function updateContent(summary) {
   var doc = DocumentApp.getActiveDocument();
   var title = doc.getName();
+  var folder = DriveApp.getRootFolder();
   var link = "https://docs.google.com/feeds/download/documents/export/Export?id="+doc.getId()+"&exportFormat=html";
   var param = {
     method : "get",
