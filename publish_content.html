@@ -90,6 +90,17 @@
         </select>
       </div>
       <div class="block form-group">
+        Where you want to store images?
+        <div>
+          <input type="radio" value="gdocs" name="img_store" id="gdocs" checked>
+          <label for="gdocs">Google Docs</label>
+        </div>
+        <div>
+          <input type="radio" value="drupal" name="img_store" id="drupal">
+          <label for="drupal">Drupal Local Storage</label>
+        </div>
+      </div>
+      <div class="block form-group">
         <input type="checkbox" id="status" checked>
         <label for="status">Publish</label>
       </div>
@@ -112,14 +123,17 @@
           var summary = $('#summary').val();
           var type = $('#type').val();
           var user = $('#user').val();
+          var img_store = $("input[name='img_store']:checked").val();
           var status = 0;
           if(document.getElementById('status').checked) {
             status = 1;
           };
           var url = '<?= data ?>';
-          google.script.run.publishContent(summary, type, user, status, url);
+          google.script.run.publishContent(summary, type, user, img_store, status, url);
         });
       });
     </script>
   </body>
 </html>
+
+

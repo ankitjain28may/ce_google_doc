@@ -162,10 +162,11 @@ function deleteSite(url) {
  * To publish/save content on Drupal site.
  * @param {string} summary The summary of content.
  * @param {string} type The type of content (article or page).
+ * @param {string} img_store Where user want to store images (gdocs or drupal).
  * @param {integer} status The status of content. 0 mean save and 1 mean publish.
  * @param {string} url The link of Drupal site.
  */
-function publishContent(summary, type, user, status, url) {
+function publishContent(summary, type, user, img_store, status, url) {
   var doc = DocumentApp.getActiveDocument();
   var title = doc.getName();
   var folder = DriveApp.getRootFolder();
@@ -183,6 +184,7 @@ function publishContent(summary, type, user, status, url) {
     'apiKey': apiKey,
     'type' : type,
     'user' : user,
+    'img_store' : img_store,
     'status' : status,
     'title' : title,
     'summary' : summary,
@@ -194,19 +196,25 @@ function publishContent(summary, type, user, status, url) {
     'muteHttpExceptions': true
   };
   var response = UrlFetchApp.fetch(url + '/google_docs/publish', options);
-  var parms = JSON.parse(response.getContentText());
-  var documentProperties = PropertiesService.getDocumentProperties();
-  documentProperties.setProperty('url', url);
-  documentProperties.setProperty('nid', parms.nid);
-  showAlert('Publish to Drupal', 'Your document has been succesfully saved to Drupal.');
-  showPublishSelectSiteSidebar();
+  if(response.getResponseCode() == 200) {
+    var parms = JSON.parse(response.getContentText());
+    var documentProperties = PropertiesService.getDocumentProperties();
+    documentProperties.setProperty('url', url);
+    documentProperties.setProperty('nid', parms.nid);
+    showAlert('Publish to Drupal', 'Your document has been succesfully saved to Drupal.');
+    showPublishSelectSiteSidebar();
+  } else {
+    showAlert('Error', 'Something went wrong, check your webserver logs.');
+    showPublishSelectSiteSidebar();
+  }
 }
 
 /**
  * To update published/saved content on Drupal site.
  * @param {string} summary The summary of content.
+ * @param {string} img_store Where user want to store images (gdocs or drupal).
  */
-function updateContent(summary) {
+function updateContent(summary, img_store) {
   var doc = DocumentApp.getActiveDocument();
   var title = doc.getName();
   var folder = DriveApp.getRootFolder();
@@ -228,6 +236,7 @@ function updateContent(summary) {
     'nid' : nid,
     'title' : title,
     'summary' : summary,
+    'img_store' : img_store,
     'body' : html
   };
   var options = {
@@ -236,9 +245,13 @@ function updateContent(summary) {
     'muteHttpExceptions': true
   };
   var response = UrlFetchApp.fetch(url + '/google_docs/update', options);
-  console.log(response.getContentText());
-  showAlert('Publish to Drupal', 'Title, Summary and Body/Content of ' + url + '/node/' + nid + ' has been successfully updated.');
-  showPublishSelectSiteSidebar();
+  if(response.getResponseCode() == 200) {
+    showAlert('Publish to Drupal', 'Title, Summary and Body/Content of ' + url + '/node/' + nid + ' has been successfully updated.');
+    showPublishSelectSiteSidebar();
+  } else {
+    showAlert('Error', 'Something went wrong, check your webserver logs.');
+    showPublishSelectSiteSidebar();
+  }
 }
 
 /**

@@ -75,6 +75,17 @@
         <textarea id="summary"><?= DocumentApp.getActiveDocument().getText() ?></textarea>
       </div>
       <div class="block form-group">
+        Where you want to store images?
+        <div>
+          <input type="radio" value="gdocs" name="img_store" id="gdocs" checked>
+          <label for="gdocs">Google Docs</label>
+        </div>
+        <div>
+          <input type="radio" value="drupal" name="img_store" id="drupal">
+          <label for="drupal">Drupal Local Storage</label>
+        </div>
+      </div>
+      <div class="block form-group">
         <button class="blue" id="save">Update at Drupal</button>
       </div>
     </div>
@@ -91,7 +102,8 @@
         $('#save').click(function() {
           $('#loading').show();
           var summary = $('#summary').val();
-          google.script.run.updateContent(summary);
+          var img_store = $("input[name='img_store']:checked").val();
+          google.script.run.updateContent(summary, img_store);
         });
       });
     </script>
