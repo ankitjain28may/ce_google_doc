@@ -73,17 +73,20 @@
       <div class="block form-group">
         <label for="type">Select Content Type</label>
         <select id="type">
-          <option value="article">Article</option>
-          <option value="page">Page</option>
+          <? var userProperties = PropertiesService.getUserProperties();
+          var apiKey = userProperties.getProperty(data);
+          var response = UrlFetchApp.fetch(data + '/google_docs/list_content_type?apiKey=' + apiKey, {muteHttpExceptions: true});
+          var parms = JSON.parse(response.getContentText());
+          for(var i = 0; i < parms.length; i++){ ?>
+            <option value="<?= parms[i].id ?>"><?= parms[i].name ?></option>
+          <? } ?>
         </select>
       </div>
       <div class="block form-group">
         <label for="user">Select User</label>
         <select id="user">
-          <? var userProperties = PropertiesService.getUserProperties();
-          var apiKey = userProperties.getProperty(data);
-          var response = UrlFetchApp.fetch(data + '/google_docs/list_users?apiKey=' + apiKey, {muteHttpExceptions: true});
-          var parms = JSON.parse(response.getContentText());
+          <? response = UrlFetchApp.fetch(data + '/google_docs/list_users?apiKey=' + apiKey, {muteHttpExceptions: true});
+          parms = JSON.parse(response.getContentText());
           for(var i = 0; i < parms.length; i++){ ?>
             <option value="<?= parms[i].uid ?>"><?= parms[i].name ?></option>
           <? } ?>
@@ -135,5 +138,3 @@
     </script>
   </body>
 </html>
-
-
