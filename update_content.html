@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Use this CSS stylesheet to ensure that add-ons styling 
+     matches the default Google Docs styles -->
+    <link href="https://ssl.gstatic.com/docs/script/css/add-ons1.css"
+     rel="stylesheet"> 
+    <style>
+      #loading {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        /* background-color: rgba(200,200,200,0.6);  */
+        background-color: rgba(200,200,200,1);
+        font-weight: bold;
+        z-index: 100;
+        opacity: 0.8;
+      }
+      #loading-content {
+        position: relative;
+        top: 50%;
+        margin: 0 auto;
+        width: 100px;
+        height: 50px;
+        line-height: 50px;
+        vertical-align: middle;
+        background-color: white;
+        border: 1px solid black;
+        text-align: center;
+        z-index: 101;
+      }
+      textarea {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 0.3em 0.4em 0.3em 0.5em;
+        -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+        transition: border linear 0.2s, box-shadow linear 0.2s;
+        color: #595959;
+        border: 1px solid #b8b8b8;
+        border-top-color: #999;
+        border-radius: 2px;
+        background: #fcfcfa;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.125);
+        font-size: 1em;
+      }
+      select {
+        line-height: 1.5;
+        padding: .6em 2.4em .5em .8em;
+      }
+      option {    font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        display: block;
+        white-space: pre;
+        min-height: 1.2em;
+        padding: 0px 2px 1px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loading">
+      <div id="loading-content">Loading ...</div>
+    </div>
+    <div class="sidebar">
+      <div class="block">
+        <i>You are going update title, summary and body/content of 
+        <? var documentProperties = PropertiesService.getDocumentProperties(); ?>
+        <a href="<?= documentProperties.getProperty('url') ?>/node/<?= documentProperties.getProperty('nid') ?>" target="_blank">
+          <?= documentProperties.getProperty('url') ?>/node/<?= documentProperties.getProperty('nid') ?>
+        </a>.
+        <br><a onclick="google.script.run.showPublishSelectSiteSidebar()">Click Here</a> to go back.</i>
+      </div>
+      <div class="block form-group">
+        <label for="summary">Summary</label>
+        <textarea id="summary"><?= DocumentApp.getActiveDocument().getText() ?></textarea>
+      </div>
+      <div class="block form-group">
+        Where you want to store images?
+        <div>
+          <input type="radio" value="gdocs" name="img_store" id="gdocs" checked>
+          <label for="gdocs">Google Docs</label>
+        </div>
+        <div>
+          <input type="radio" value="drupal" name="img_store" id="drupal">
+          <label for="drupal">Drupal Local Storage</label>
+        </div>
+      </div>
+      <div class="block form-group">
+        <button class="blue" id="save">Update at Drupal</button>
+      </div>
+    </div>
+
+    <!-- Load the jQuery library from the Google CDN -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    
+    <script>
+      /**
+       * On document load, assign click handlers to button.
+       */
+      $(function() {
+        $('#loading').hide();
+        $('#save').click(function() {
+          $('#loading').show();
+          var summary = $('#summary').val();
+          var img_store = $("input[name='img_store']:checked").val();
+          google.script.run.updateContent(summary, img_store);
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "name": "Publish-to-Drupal",
+  "version": "0.0.1",
+  "description": "A Google Docs Add-On which allow publishing document to Drupal.",
+  "scripts": {
+    "lint": "eslint \"./**/*.gs\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ankitjain28may/ce_google_doc"
+  },
+  "author": "Anant Jain",
+  "license": "NA",
+  "bugs": {
+    "url": "https://github.com/ankitjain28may/ce_google_doc/issues"
+  },
+  "homepage": "https://github.com/ankitjain28may/ce_google_doc",
+  "dependencies": {
+    "jquery": "^2.1.3"
+  },
+  "devDependencies": {
+    "eslint": "^6.1.0",
+    "eslint-config-google": "^0.13.0",
+    "eslint-config-standard": "^13.0.1"
+  }
+}
