@@ -106,6 +106,11 @@ function showUpdateContentSidebar() {
   }
 }
 
+/**
+ * Opens a Help dialogue box in the document containing the add-on's user interface.
+ * This method is only used by the regular add-on, and is never called by
+ * the mobile add-on version.
+ */
 function showHelpModal() {
   var htmlOutput = HtmlService
     .createHtmlOutputFromFile('help_modal.html')
@@ -159,6 +164,13 @@ function deleteSite(url) {
 }
 
 /**
+ * To get permission for DriveApp class so that we can export HTML version of document.
+ */
+function setScope() {
+  DriveApp.getRootFolder();
+}
+
+/**
  * To publish/save content on Drupal site.
  * @param {string} summary The summary of content.
  * @param {string} type The type of content (article or page).
@@ -169,7 +181,6 @@ function deleteSite(url) {
 function publishContent(summary, type, user, img_store, status, url) {
   var doc = DocumentApp.getActiveDocument();
   var title = doc.getName();
-  var folder = DriveApp.getRootFolder();
   var link = "https://docs.google.com/feeds/download/documents/export/Export?id="+doc.getId()+"&exportFormat=html";
   var param = {
     method : "get",
@@ -217,7 +228,6 @@ function publishContent(summary, type, user, img_store, status, url) {
 function updateContent(summary, img_store) {
   var doc = DocumentApp.getActiveDocument();
   var title = doc.getName();
-  var folder = DriveApp.getRootFolder();
   var link = "https://docs.google.com/feeds/download/documents/export/Export?id="+doc.getId()+"&exportFormat=html";
   var param = {
     method : "get",

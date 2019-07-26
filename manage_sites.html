@@ -17,6 +17,8 @@
         /* background-color: rgba(200,200,200,0.6);  */
         background-color: rgba(200,200,200,1);
         font-weight: bold;
+        z-index: 100;
+        opacity: 0.8;
       }
       #loading-content {
         position: relative;
@@ -29,6 +31,7 @@
         background-color: white;
         border: 1px solid black;
         text-align: center;
+        z-index: 101;
       }
       .sites_list {
         margin-bottom: 25px;
@@ -109,7 +112,7 @@
     </div>
 
     <!-- Load the jQuery library from the Google CDN -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     
     <script>
       /**
@@ -124,8 +127,10 @@
           var key = $('#key').val();
           if(url == "") {
             google.script.run.showAlert('Error', 'Site URL can not be empty.');
+            google.script.run.showManageSitesSidebar();
           } else if(key == "") {
             google.script.run.showAlert('Error', 'API Key can not be empty.');
+            google.script.run.showManageSitesSidebar();
           } else if(url.slice(-1) == '/') {
             google.script.run.testConnection(url.slice(0,-1), key);
           } else {
