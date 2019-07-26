@@ -15,10 +15,10 @@ function onInstall() {
 function onOpen() {
   DocumentApp.getUi()
     .createAddonMenu() // Add a new option in the Google Docs Add-ons Menu
-    .addItem("Manage Sites", "showManageSitesSidebar")
-    .addItem("Publish", "showPublishSelectSiteSidebar")
+    .addItem('Manage Sites', 'showManageSitesSidebar')
+    .addItem('Publish', 'showPublishSelectSiteSidebar')
     .addSeparator()
-    .addItem("Help", "showHelpModal")
+    .addItem('Help', 'showHelpModal')
     .addToUi();  // Run the showSidebar function when someone clicks the menu
 }
 
@@ -28,9 +28,9 @@ function onOpen() {
  * the mobile add-on version.
  */
 function showManageSitesSidebar() {
-  var html = HtmlService.createTemplateFromFile("manage_sites")
+  var html = HtmlService.createTemplateFromFile('manage_sites')
     .evaluate()
-    .setTitle("Publish to Drupal - Manage Sites"); // The title shows in the sidebar
+    .setTitle('Publish to Drupal - Manage Sites'); // The title shows in the sidebar
   DocumentApp.getUi().showSidebar(html);
 }
 
@@ -46,9 +46,9 @@ function showPublishSelectSiteSidebar() {
     showAlert('Error', 'You have 0 sites. First Add Site to publish your Google Docsdocument on Drupal.');
     showManageSitesSidebar();
   } else {
-    var html = HtmlService.createTemplateFromFile("publish_select_site")
+    var html = HtmlService.createTemplateFromFile('publish_select_site')
       .evaluate()
-      .setTitle("Publish to Drupal"); // The title shows in the sidebar
+      .setTitle('Publish to Drupal'); // The title shows in the sidebar
     DocumentApp.getUi().showSidebar(html);
   }
 }
@@ -67,7 +67,7 @@ function showPublishContentSidebar(url) {
     if(parms.msg === 'ok') {
       var t = HtmlService.createTemplateFromFile('publish_content');
       t.data = url;
-      DocumentApp.getUi().showSidebar(t.evaluate().setTitle("Publish to Drupal"));
+      DocumentApp.getUi().showSidebar(t.evaluate().setTitle('Publish to Drupal'));
     } else {
       showAlert('Error', 'Unable to connect. Invalid API Key.');
       showManageSitesSidebar();
@@ -92,9 +92,9 @@ function showUpdateContentSidebar() {
   if(response.getResponseCode() == 200) {
     var parms = JSON.parse(response.getContentText());
     if(parms.msg === 'ok') {
-      var html = HtmlService.createTemplateFromFile("update_content")
+      var html = HtmlService.createTemplateFromFile('update_content')
         .evaluate()
-        .setTitle("Publish to Drupal"); // The title shows in the sidebar
+        .setTitle('Publish to Drupal'); // The title shows in the sidebar
       DocumentApp.getUi().showSidebar(html);
     } else {
       showAlert('Error', 'Unable to connect. Invalid API Key.');
@@ -181,10 +181,10 @@ function setScope() {
 function publishContent(summary, type, user, img_store, status, url) {
   var doc = DocumentApp.getActiveDocument();
   var title = doc.getName();
-  var link = "https://docs.google.com/feeds/download/documents/export/Export?id="+doc.getId()+"&exportFormat=html";
+  var link = 'https://docs.google.com/feeds/download/documents/export/Export?id='+doc.getId()+'&exportFormat=html';
   var param = {
-    method : "get",
-    headers : {"Authorization": "Bearer " + ScriptApp.getOAuthToken()},
+    method : 'get',
+    headers : {'Authorization': 'Bearer ' + ScriptApp.getOAuthToken()},
     muteHttpExceptions:true,
   };
   var html = UrlFetchApp.fetch(link,param).getContentText();
@@ -228,10 +228,10 @@ function publishContent(summary, type, user, img_store, status, url) {
 function updateContent(summary, img_store) {
   var doc = DocumentApp.getActiveDocument();
   var title = doc.getName();
-  var link = "https://docs.google.com/feeds/download/documents/export/Export?id="+doc.getId()+"&exportFormat=html";
+  var link = 'https://docs.google.com/feeds/download/documents/export/Export?id='+doc.getId()+'&exportFormat=html';
   var param = {
-    method : "get",
-    headers : {"Authorization": "Bearer " + ScriptApp.getOAuthToken()},
+    method : 'get',
+    headers : {'Authorization': 'Bearer ' + ScriptApp.getOAuthToken()},
     muteHttpExceptions:true,
   };
   var html = UrlFetchApp.fetch(link,param).getContentText();
